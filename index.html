@@ -1,0 +1,1581 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AbsenKu - F1 & F2</title>
+
+  <style>
+    /* ==============================
+       RESET DAN DASAR
+       ============================== */
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f4f7fb;
+      color: #1f2937;
+    }
+
+    button,
+    input,
+    textarea,
+    select {
+      font: inherit;
+    }
+
+    .container {
+      width: min(100% - 24px, 1000px);
+      margin: 0 auto;
+    }
+
+    /* ==============================
+       HEADER
+       ============================== */
+    header {
+      background: #2563eb;
+      color: white;
+      padding: 24px 0;
+    }
+
+    header h1 {
+      margin: 0 0 6px;
+      font-size: 28px;
+    }
+
+    header p {
+      margin: 0;
+      opacity: 0.9;
+    }
+
+    /* ==============================
+       NAVIGASI
+       ============================== */
+    nav {
+      background: white;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .nav-inner {
+      display: flex;
+      gap: 8px;
+      padding: 10px 0;
+    }
+
+    .nav-button {
+      flex: 1;
+      background: #e5e7eb;
+      color: #1f2937;
+    }
+
+    .nav-button.aktif {
+      background: #2563eb;
+      color: white;
+    }
+
+    /* ==============================
+       KONTEN
+       ============================== */
+    main {
+      padding: 20px 0 40px;
+    }
+
+    .halaman {
+      display: none;
+    }
+
+    .halaman.aktif {
+      display: block;
+    }
+
+    .card {
+      background: white;
+      border-radius: 12px;
+      padding: 18px;
+      margin-bottom: 18px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    }
+
+    .card h2 {
+      margin-top: 0;
+      font-size: 20px;
+    }
+
+    /* ==============================
+       FORM
+       ============================== */
+    .form-group {
+      margin-bottom: 14px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: bold;
+    }
+
+    input,
+    textarea,
+    select {
+      width: 100%;
+      padding: 11px 12px;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      outline: none;
+      background: white;
+    }
+
+    input:focus,
+    textarea:focus,
+    select:focus {
+      border-color: #2563eb;
+    }
+
+    textarea {
+      min-height: 130px;
+      resize: vertical;
+    }
+
+    .button-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    button {
+      border: 0;
+      border-radius: 8px;
+      padding: 11px 16px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    button:hover {
+      opacity: 0.9;
+    }
+
+    .button-primary {
+      background: #2563eb;
+      color: white;
+    }
+
+    .button-danger {
+      background: #dc2626;
+      color: white;
+    }
+
+    .button-secondary {
+      background: #e5e7eb;
+      color: #1f2937;
+    }
+
+    /* ==============================
+       PESAN
+       ============================== */
+    .message {
+      display: none;
+      padding: 12px;
+      border-radius: 8px;
+      margin-bottom: 18px;
+      font-weight: bold;
+    }
+
+    .message.success {
+      display: block;
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .message.error {
+      display: block;
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    /* ==============================
+       TABEL
+       ============================== */
+    .table-wrapper {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 600px;
+    }
+
+    th,
+    td {
+      padding: 11px 10px;
+      border-bottom: 1px solid #e5e7eb;
+      text-align: left;
+      vertical-align: middle;
+    }
+
+    th {
+      background: #f8fafc;
+    }
+
+    .empty {
+      color: #64748b;
+      text-align: center;
+      padding: 20px;
+    }
+
+    /* ==============================
+       STATUS ABSENSI
+       ============================== */
+    .status-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+    }
+
+    .status-button {
+      min-width: 42px;
+      padding: 8px 10px;
+      background: #e5e7eb;
+      color: #1f2937;
+    }
+
+    .status-button.aktif {
+      background: #2563eb;
+      color: white;
+    }
+
+    .ringkasan {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .ringkasan-item {
+      padding: 14px;
+      background: #f8fafc;
+      border-radius: 8px;
+      text-align: center;
+      border: 1px solid #e5e7eb;
+    }
+
+    .ringkasan-item strong {
+      display: block;
+      font-size: 24px;
+      margin-top: 4px;
+    }
+
+    .catatan {
+      color: #64748b;
+      font-size: 14px;
+      margin-top: 8px;
+    }
+
+    @media (max-width: 600px) {
+      header h1 {
+        font-size: 24px;
+      }
+
+      .nav-inner {
+        flex-direction: column;
+      }
+
+      .nav-button {
+        width: 100%;
+      }
+
+      .button-row {
+        flex-direction: column;
+      }
+
+      .button-row button {
+        width: 100%;
+      }
+
+      .ringkasan {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .card {
+        padding: 15px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ==============================
+       HEADER
+       ============================== -->
+  <header>
+    <div class="container">
+      <h1>AbsenKu</h1>
+      <p>Kelola data siswa dan absensi harian.</p>
+    </div>
+  </header>
+
+  <!-- ==============================
+       NAVIGASI F1 DAN F2
+       ============================== -->
+  <nav>
+    <div class="container nav-inner">
+      <button
+        type="button"
+        class="nav-button aktif"
+        id="navDataSiswa"
+      >
+        Data Siswa
+      </button>
+
+      <button
+        type="button"
+        class="nav-button"
+        id="navAbsenHarian"
+      >
+        Absen Harian
+      </button>
+    </div>
+  </nav>
+
+  <main class="container">
+
+    <!-- Pesan berhasil/gagal -->
+    <div
+      id="pesan"
+      class="message"
+      role="alert"
+      aria-live="polite"
+    ></div>
+
+    <!-- ==================================================
+         F1: KELOLA DATA SISWA
+         ================================================== -->
+    <section
+      id="halamanDataSiswa"
+      class="halaman aktif"
+    >
+
+      <!-- Tambah satu siswa -->
+      <div class="card">
+        <h2>Tambah Siswa</h2>
+
+        <div class="form-group">
+          <label for="kelasSiswa">
+            Kelas
+          </label>
+
+          <input
+            type="text"
+            id="kelasSiswa"
+            placeholder="Contoh: XI TJKT 1"
+            maxlength="50"
+            autocomplete="off"
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="namaSiswa">
+            Nama Siswa
+          </label>
+
+          <input
+            type="text"
+            id="namaSiswa"
+            placeholder="Masukkan nama siswa"
+            maxlength="100"
+            autocomplete="off"
+          >
+        </div>
+
+        <button
+          type="button"
+          class="button-primary"
+          id="tombolTambahSiswa"
+        >
+          Tambah Siswa
+        </button>
+      </div>
+
+      <!-- Tambah banyak siswa -->
+      <div class="card">
+        <h2>Tambah Banyak Siswa</h2>
+
+        <div class="form-group">
+          <label for="daftarNama">
+            Daftar Nama
+          </label>
+
+          <textarea
+            id="daftarNama"
+            maxlength="5000"
+            placeholder="Satu nama setiap baris&#10;Contoh:&#10;Andi&#10;Budi&#10;Citra"
+          ></textarea>
+        </div>
+
+        <button
+          type="button"
+          class="button-primary"
+          id="tombolTambahBanyak"
+        >
+          Tambah Semua
+        </button>
+      </div>
+
+      <!-- Daftar siswa -->
+      <div class="card">
+        <h2>Daftar Siswa</h2>
+
+        <div class="form-group">
+          <label for="filterKelas">
+            Tampilkan Kelas
+          </label>
+
+          <select id="filterKelas">
+            <option value="">
+              Semua kelas
+            </option>
+          </select>
+        </div>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>No.</th>
+                <th>Nama Siswa</th>
+                <th>Kelas</th>
+                <th>Aksi</th>
+              </tr>
+            </thead>
+
+            <tbody id="tabelSiswa"></tbody>
+          </table>
+        </div>
+
+        <div id="jumlahSiswa" class="catatan">
+          Jumlah siswa: 0
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================================================
+         F2: ABSEN HARIAN
+         ================================================== -->
+    <section
+      id="halamanAbsenHarian"
+      class="halaman"
+    >
+
+      <!-- Pilih kelas dan tanggal -->
+      <div class="card">
+        <h2>Absen Harian</h2>
+
+        <div class="form-group">
+          <label for="pilihKelasAbsen">
+            Kelas
+          </label>
+
+          <select id="pilihKelasAbsen">
+            <option value="">
+              Pilih kelas
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="tanggalAbsen">
+            Tanggal
+          </label>
+
+          <input
+            type="date"
+            id="tanggalAbsen"
+          >
+        </div>
+
+        <p class="catatan">
+          Pilih H = Hadir, I = Izin, S = Sakit, A = Alpa.
+        </p>
+      </div>
+
+      <!-- Ringkasan -->
+      <div class="card">
+        <h2>Ringkasan</h2>
+
+        <div class="ringkasan">
+          <div class="ringkasan-item">
+            H
+            <strong id="jumlahHadir">0</strong>
+          </div>
+
+          <div class="ringkasan-item">
+            I
+            <strong id="jumlahIzin">0</strong>
+          </div>
+
+          <div class="ringkasan-item">
+            S
+            <strong id="jumlahSakit">0</strong>
+          </div>
+
+          <div class="ringkasan-item">
+            A
+            <strong id="jumlahAlpa">0</strong>
+          </div>
+        </div>
+      </div>
+
+      <!-- Daftar absensi -->
+      <div class="card">
+        <h2>Daftar Kehadiran</h2>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>No.</th>
+                <th>Nama Siswa</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+
+            <tbody id="tabelAbsen"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    "use strict";
+
+    /* ==================================================
+       KONFIGURASI
+       ================================================== */
+
+    // Semua data aplikasi disimpan dengan satu kunci.
+    const KUNCI_DATA = "absenku_v1";
+
+    // Status absensi yang diperbolehkan.
+    const STATUS_ABSEN = ["H", "I", "S", "A"];
+
+    // Struktur data awal sesuai PRD.
+    let dataAplikasi = {
+      siswa: [],
+      absen: {},
+      kelasTerakhir: ""
+    };
+
+    /* ==================================================
+       REFERENSI ELEMEN HTML
+       ================================================== */
+
+    const elemen = {
+      pesan: document.getElementById("pesan"),
+
+      navDataSiswa: document.getElementById("navDataSiswa"),
+      navAbsenHarian: document.getElementById("navAbsenHarian"),
+
+      halamanDataSiswa:
+        document.getElementById("halamanDataSiswa"),
+
+      halamanAbsenHarian:
+        document.getElementById("halamanAbsenHarian"),
+
+      kelasSiswa:
+        document.getElementById("kelasSiswa"),
+
+      namaSiswa:
+        document.getElementById("namaSiswa"),
+
+      daftarNama:
+        document.getElementById("daftarNama"),
+
+      filterKelas:
+        document.getElementById("filterKelas"),
+
+      tabelSiswa:
+        document.getElementById("tabelSiswa"),
+
+      jumlahSiswa:
+        document.getElementById("jumlahSiswa"),
+
+      tombolTambahSiswa:
+        document.getElementById("tombolTambahSiswa"),
+
+      tombolTambahBanyak:
+        document.getElementById("tombolTambahBanyak"),
+
+      pilihKelasAbsen:
+        document.getElementById("pilihKelasAbsen"),
+
+      tanggalAbsen:
+        document.getElementById("tanggalAbsen"),
+
+      tabelAbsen:
+        document.getElementById("tabelAbsen"),
+
+      jumlahHadir:
+        document.getElementById("jumlahHadir"),
+
+      jumlahIzin:
+        document.getElementById("jumlahIzin"),
+
+      jumlahSakit:
+        document.getElementById("jumlahSakit"),
+
+      jumlahAlpa:
+        document.getElementById("jumlahAlpa")
+    };
+
+    /* ==================================================
+       UTILITAS TEKS
+       ================================================== */
+
+    // Membersihkan spasi berlebihan dari input pengguna.
+    function bersihkanTeks(teks) {
+      return teks.trim().replace(/\s+/g, " ");
+    }
+
+    /*
+      Data pengguna tidak dimasukkan menggunakan innerHTML.
+      textContent/createElement digunakan agar teks dianggap
+      sebagai teks biasa, bukan sebagai HTML.
+    */
+
+    /* ==================================================
+       PENYIMPANAN DATA
+       ================================================== */
+
+    // Membaca data dari localStorage.
+    function bacaData() {
+      try {
+        const dataTersimpan =
+          localStorage.getItem(KUNCI_DATA);
+
+        if (!dataTersimpan) {
+          return;
+        }
+
+        const data =
+          JSON.parse(dataTersimpan);
+
+        if (!validasiData(data)) {
+          tampilkanPesan(
+            "Data tersimpan tidak valid.",
+            "error"
+          );
+          return;
+        }
+
+        dataAplikasi = data;
+      } catch (error) {
+        console.error(
+          "Gagal membaca data:",
+          error
+        );
+
+        tampilkanPesan(
+          "Data aplikasi tidak dapat dibaca.",
+          "error"
+        );
+      }
+    }
+
+    // Memastikan struktur data utama masih benar.
+    function validasiData(data) {
+      return Boolean(
+        data &&
+        Array.isArray(data.siswa) &&
+        data.absen &&
+        typeof data.absen === "object" &&
+        typeof data.kelasTerakhir === "string"
+      );
+    }
+
+    // Menyimpan data aplikasi ke localStorage.
+    function simpanData() {
+      try {
+        localStorage.setItem(
+          KUNCI_DATA,
+          JSON.stringify(dataAplikasi)
+        );
+
+        return true;
+      } catch (error) {
+        console.error(
+          "Gagal menyimpan data:",
+          error
+        );
+
+        tampilkanPesan(
+          "Data gagal disimpan.",
+          "error"
+        );
+
+        return false;
+      }
+    }
+
+    /* ==================================================
+       ID SISWA
+       ================================================== */
+
+    // Membuat ID unik untuk setiap siswa.
+    function buatIdSiswa() {
+      if (
+        window.crypto &&
+        typeof crypto.randomUUID === "function"
+      ) {
+        return crypto.randomUUID();
+      }
+
+      return (
+        "siswa-" +
+        Date.now() +
+        "-" +
+        Math.random().toString(36).slice(2)
+      );
+    }
+
+    /* ==================================================
+       KELAS
+       ================================================== */
+
+    // Mengambil daftar kelas unik dari data siswa.
+    function ambilDaftarKelas() {
+      const kelas = dataAplikasi.siswa.map(
+        (siswa) => siswa.kelas
+      );
+
+      return [...new Set(kelas)].sort(
+        (a, b) => a.localeCompare(b, "id")
+      );
+    }
+
+    // Mengisi pilihan kelas pada F1 dan F2.
+    function perbaruiPilihanKelas() {
+      const kelasLamaF1 =
+        elemen.filterKelas.value;
+
+      const kelasLamaF2 =
+        elemen.pilihKelasAbsen.value;
+
+      const daftarKelas =
+        ambilDaftarKelas();
+
+      isiSelectKelas(
+        elemen.filterKelas,
+        daftarKelas,
+        "Semua kelas"
+      );
+
+      isiSelectKelas(
+        elemen.pilihKelasAbsen,
+        daftarKelas,
+        "Pilih kelas"
+      );
+
+      if (
+        daftarKelas.includes(kelasLamaF1)
+      ) {
+        elemen.filterKelas.value =
+          kelasLamaF1;
+      }
+
+      if (
+        daftarKelas.includes(kelasLamaF2)
+      ) {
+        elemen.pilihKelasAbsen.value =
+          kelasLamaF2;
+      }
+    }
+
+    // Mengisi elemen select dengan data kelas.
+    function isiSelectKelas(
+      select,
+      daftarKelas,
+      teksAwal
+    ) {
+      select.replaceChildren();
+
+      const opsiAwal =
+        document.createElement("option");
+
+      opsiAwal.value = "";
+      opsiAwal.textContent = teksAwal;
+
+      select.appendChild(opsiAwal);
+
+      daftarKelas.forEach((kelas) => {
+        const opsi =
+          document.createElement("option");
+
+        opsi.value = kelas;
+
+        // textContent memastikan nama kelas
+        // tidak diproses sebagai HTML.
+        opsi.textContent = kelas;
+
+        select.appendChild(opsi);
+      });
+    }
+
+    /* ==================================================
+       F1 - CEK SISWA GANDA
+       ================================================== */
+
+    // Mengecek nama yang sama pada kelas yang sama.
+    function siswaSudahAda(nama, kelas) {
+      const namaNormal =
+        nama.toLowerCase();
+
+      const kelasNormal =
+        kelas.toLowerCase();
+
+      return dataAplikasi.siswa.some(
+        (siswa) =>
+          siswa.nama.toLowerCase() === namaNormal &&
+          siswa.kelas.toLowerCase() === kelasNormal
+      );
+    }
+
+    /* ==================================================
+       F1 - TAMBAH SATU SISWA
+       ================================================== */
+
+    function tambahSatuSiswa() {
+      const kelas =
+        bersihkanTeks(
+          elemen.kelasSiswa.value
+        );
+
+      const nama =
+        bersihkanTeks(
+          elemen.namaSiswa.value
+        );
+
+      if (!kelas || !nama) {
+        tampilkanPesan(
+          "Kelas dan nama siswa wajib diisi.",
+          "error"
+        );
+        return;
+      }
+
+      if (siswaSudahAda(nama, kelas)) {
+        tampilkanPesan(
+          "Nama siswa tersebut sudah ada di kelas ini.",
+          "error"
+        );
+        return;
+      }
+
+      dataAplikasi.siswa.push({
+        id: buatIdSiswa(),
+        kelas: kelas,
+        nama: nama
+      });
+
+      dataAplikasi.kelasTerakhir = kelas;
+
+      if (!simpanData()) {
+        return;
+      }
+
+      elemen.namaSiswa.value = "";
+
+      perbaruiPilihanKelas();
+
+      elemen.filterKelas.value = kelas;
+
+      elemen.pilihKelasAbsen.value = kelas;
+
+      tampilkanPesan(
+        "Siswa berhasil ditambahkan.",
+        "success"
+      );
+
+      tampilkanDaftarSiswa();
+      tampilkanDaftarAbsen();
+    }
+
+    /* ==================================================
+       F1 - TAMBAH BANYAK SISWA
+       ================================================== */
+
+    function tambahBanyakSiswa() {
+      const kelas =
+        bersihkanTeks(
+          elemen.kelasSiswa.value
+        );
+
+      const daftar =
+        elemen.daftarNama.value
+          .split("\n")
+          .map(bersihkanTeks)
+          .filter(Boolean);
+
+      if (!kelas) {
+        tampilkanPesan(
+          "Kelas wajib diisi.",
+          "error"
+        );
+        return;
+      }
+
+      if (daftar.length === 0) {
+        tampilkanPesan(
+          "Masukkan minimal satu nama siswa.",
+          "error"
+        );
+        return;
+      }
+
+      let ditambahkan = 0;
+      let dilewati = 0;
+
+      daftar.forEach((nama) => {
+        if (siswaSudahAda(nama, kelas)) {
+          dilewati++;
+          return;
+        }
+
+        dataAplikasi.siswa.push({
+          id: buatIdSiswa(),
+          kelas: kelas,
+          nama: nama
+        });
+
+        ditambahkan++;
+      });
+
+      dataAplikasi.kelasTerakhir = kelas;
+
+      if (!simpanData()) {
+        return;
+      }
+
+      elemen.daftarNama.value = "";
+
+      perbaruiPilihanKelas();
+
+      elemen.filterKelas.value = kelas;
+
+      elemen.pilihKelasAbsen.value = kelas;
+
+      tampilkanPesan(
+        ditambahkan +
+        " siswa ditambahkan, " +
+        dilewati +
+        " nama ganda dilewati.",
+        "success"
+      );
+
+      tampilkanDaftarSiswa();
+      tampilkanDaftarAbsen();
+    }
+
+    /* ==================================================
+       F1 - HAPUS SISWA
+       ================================================== */
+
+    function hapusSiswa(idSiswa) {
+      const siswa =
+        dataAplikasi.siswa.find(
+          (item) => item.id === idSiswa
+        );
+
+      if (!siswa) {
+        tampilkanPesan(
+          "Siswa tidak ditemukan.",
+          "error"
+        );
+        return;
+      }
+
+      /*
+        Konfirmasi wajib sebelum penghapusan.
+        Data siswa tidak langsung dihapus.
+      */
+      const yakin = confirm(
+        "Hapus siswa \"" +
+        siswa.nama +
+        "\" dari kelas " +
+        siswa.kelas +
+        "?"
+      );
+
+      if (!yakin) {
+        return;
+      }
+
+      dataAplikasi.siswa =
+        dataAplikasi.siswa.filter(
+          (item) => item.id !== idSiswa
+        );
+
+      if (!simpanData()) {
+        return;
+      }
+
+      perbaruiPilihanKelas();
+
+      tampilkanPesan(
+        "Siswa berhasil dihapus.",
+        "success"
+      );
+
+      tampilkanDaftarSiswa();
+      tampilkanDaftarAbsen();
+    }
+
+    /* ==================================================
+       F1 - TAMPILKAN SISWA
+       ================================================== */
+
+    function tampilkanDaftarSiswa() {
+      const filter =
+        elemen.filterKelas.value;
+
+      elemen.tabelSiswa.replaceChildren();
+
+      const siswaTampil =
+        dataAplikasi.siswa.filter(
+          (siswa) =>
+            !filter ||
+            siswa.kelas === filter
+        );
+
+      if (siswaTampil.length === 0) {
+        const baris =
+          document.createElement("tr");
+
+        const kolom =
+          document.createElement("td");
+
+        kolom.colSpan = 4;
+        kolom.className = "empty";
+        kolom.textContent =
+          "Belum ada data siswa.";
+
+        baris.appendChild(kolom);
+        elemen.tabelSiswa.appendChild(baris);
+      }
+
+      siswaTampil.forEach(
+        (siswa, index) => {
+          const baris =
+            document.createElement("tr");
+
+          const kolomNo =
+            document.createElement("td");
+
+          const kolomNama =
+            document.createElement("td");
+
+          const kolomKelas =
+            document.createElement("td");
+
+          const kolomAksi =
+            document.createElement("td");
+
+          const tombolHapus =
+            document.createElement("button");
+
+          kolomNo.textContent =
+            String(index + 1);
+
+          // textContent digunakan untuk
+          // mengamankan data pengguna.
+          kolomNama.textContent =
+            siswa.nama;
+
+          kolomKelas.textContent =
+            siswa.kelas;
+
+          tombolHapus.type = "button";
+          tombolHapus.className =
+            "button-danger";
+          tombolHapus.textContent =
+            "Hapus";
+
+          tombolHapus.addEventListener(
+            "click",
+            () => hapusSiswa(siswa.id)
+          );
+
+          kolomAksi.appendChild(
+            tombolHapus
+          );
+
+          baris.append(
+            kolomNo,
+            kolomNama,
+            kolomKelas,
+            kolomAksi
+          );
+
+          elemen.tabelSiswa.appendChild(
+            baris
+          );
+        }
+      );
+
+      elemen.jumlahSiswa.textContent =
+        "Jumlah siswa: " +
+        siswaTampil.length;
+    }
+
+    /* ==================================================
+       F2 - TANGGAL
+       ================================================== */
+
+    // Mengambil tanggal lokal dalam format YYYY-MM-DD.
+    function tanggalHariIni() {
+      const sekarang = new Date();
+
+      const tahun =
+        sekarang.getFullYear();
+
+      const bulan =
+        String(
+          sekarang.getMonth() + 1
+        ).padStart(2, "0");
+
+      const hari =
+        String(
+          sekarang.getDate()
+        ).padStart(2, "0");
+
+      return (
+        tahun +
+        "-" +
+        bulan +
+        "-" +
+        hari
+      );
+    }
+
+    /* ==================================================
+       F2 - KUNCI ABSENSI
+       ================================================== */
+
+    /*
+      Setiap absensi memiliki kunci:
+      tanggal|kelas
+
+      Contoh:
+      2026-09-30|XI TJKT 1
+    */
+    function buatKunciAbsen(
+      tanggal,
+      kelas
+    ) {
+      return tanggal + "|" + kelas;
+    }
+
+    // Mengambil objek absensi untuk kelas/tanggal.
+    function ambilDataAbsen(
+      tanggal,
+      kelas
+    ) {
+      const kunci =
+        buatKunciAbsen(
+          tanggal,
+          kelas
+        );
+
+      if (
+        !dataAplikasi.absen[kunci]
+      ) {
+        dataAplikasi.absen[kunci] = {};
+      }
+
+      return dataAplikasi.absen[kunci];
+    }
+
+    /* ==================================================
+       F2 - PILIH STATUS
+       ================================================== */
+
+    function ubahStatusAbsen(
+      idSiswa,
+      status
+    ) {
+      if (
+        !STATUS_ABSEN.includes(status)
+      ) {
+        tampilkanPesan(
+          "Status absensi tidak valid.",
+          "error"
+        );
+        return;
+      }
+
+      const kelas =
+        elemen.pilihKelasAbsen.value;
+
+      const tanggal =
+        elemen.tanggalAbsen.value;
+
+      if (!kelas || !tanggal) {
+        tampilkanPesan(
+          "Pilih kelas dan tanggal terlebih dahulu.",
+          "error"
+        );
+        return;
+      }
+
+      const dataAbsen =
+        ambilDataAbsen(
+          tanggal,
+          kelas
+        );
+
+      dataAbsen[idSiswa] = status;
+
+      if (!simpanData()) {
+        return;
+      }
+
+      tampilkanDaftarAbsen();
+
+      tampilkanPesan(
+        "Status absensi berhasil disimpan.",
+        "success"
+      );
+    }
+
+    /* ==================================================
+       F2 - TAMPILKAN DAFTAR ABSEN
+       ================================================== */
+
+    function tampilkanDaftarAbsen() {
+      const kelas =
+        elemen.pilihKelasAbsen.value;
+
+      const tanggal =
+        elemen.tanggalAbsen.value;
+
+      elemen.tabelAbsen.replaceChildren();
+
+      resetRingkasan();
+
+      if (!kelas || !tanggal) {
+        tampilkanPesanAbsenKosong(
+          "Pilih kelas dan tanggal untuk menampilkan siswa."
+        );
+        return;
+      }
+
+      const siswaKelas =
+        dataAplikasi.siswa.filter(
+          (siswa) =>
+            siswa.kelas === kelas
+        );
+
+      if (siswaKelas.length === 0) {
+        tampilkanPesanAbsenKosong(
+          "Belum ada siswa pada kelas ini."
+        );
+        return;
+      }
+
+      const dataAbsen =
+        ambilDataAbsen(
+          tanggal,
+          kelas
+        );
+
+      siswaKelas.forEach(
+        (siswa, index) => {
+          const baris =
+            document.createElement("tr");
+
+          const kolomNo =
+            document.createElement("td");
+
+          const kolomNama =
+            document.createElement("td");
+
+          const kolomStatus =
+            document.createElement("td");
+
+          const kelompokTombol =
+            document.createElement("div");
+
+          kelompokTombol.className =
+            "status-group";
+
+          kolomNo.textContent =
+            String(index + 1);
+
+          // Nama siswa dimasukkan dengan
+          // textContent, bukan innerHTML.
+          kolomNama.textContent =
+            siswa.nama;
+
+          STATUS_ABSEN.forEach(
+            (status) => {
+              const tombol =
+                document.createElement("button");
+
+              tombol.type = "button";
+              tombol.className =
+                "status-button";
+
+              tombol.textContent =
+                status;
+
+              if (
+                dataAbsen[siswa.id] ===
+                status
+              ) {
+                tombol.classList.add(
+                  "aktif"
+                );
+              }
+
+              tombol.addEventListener(
+                "click",
+                () =>
+                  ubahStatusAbsen(
+                    siswa.id,
+                    status
+                  )
+              );
+
+              kelompokTombol.appendChild(
+                tombol
+              );
+            }
+          );
+
+          kolomStatus.appendChild(
+            kelompokTombol
+          );
+
+          baris.append(
+            kolomNo,
+            kolomNama,
+            kolomStatus
+          );
+
+          elemen.tabelAbsen.appendChild(
+            baris
+          );
+        }
+      );
+
+      perbaruiRingkasan(
+        dataAbsen,
+        siswaKelas
+      );
+    }
+
+    /* ==================================================
+       F2 - RINGKASAN
+       ================================================== */
+
+    function resetRingkasan() {
+      elemen.jumlahHadir.textContent =
+        "0";
+
+      elemen.jumlahIzin.textContent =
+        "0";
+
+      elemen.jumlahSakit.textContent =
+        "0";
+
+      elemen.jumlahAlpa.textContent =
+        "0";
+    }
+
+    function perbaruiRingkasan(
+      dataAbsen,
+      siswaKelas
+    ) {
+      const jumlah = {
+        H: 0,
+        I: 0,
+        S: 0,
+        A: 0
+      };
+
+      siswaKelas.forEach(
+        (siswa) => {
+          const status =
+            dataAbsen[siswa.id];
+
+          if (
+            STATUS_ABSEN.includes(status)
+          ) {
+            jumlah[status]++;
+          }
+        }
+      );
+
+      elemen.jumlahHadir.textContent =
+        String(jumlah.H);
+
+      elemen.jumlahIzin.textContent =
+        String(jumlah.I);
+
+      elemen.jumlahSakit.textContent =
+        String(jumlah.S);
+
+      elemen.jumlahAlpa.textContent =
+        String(jumlah.A);
+    }
+
+    function tampilkanPesanAbsenKosong(
+      teks
+    ) {
+      const baris =
+        document.createElement("tr");
+
+      const kolom =
+        document.createElement("td");
+
+      kolom.colSpan = 3;
+      kolom.className = "empty";
+
+      // textContent menjaga teks tetap
+      // sebagai teks biasa.
+      kolom.textContent = teks;
+
+      baris.appendChild(kolom);
+
+      elemen.tabelAbsen.appendChild(
+        baris
+      );
+    }
+
+    /* ==================================================
+       NAVIGASI
+       ================================================== */
+
+    function tampilkanHalaman(
+      halaman
+    ) {
+      const dataSiswaAktif =
+        halaman === "siswa";
+
+      elemen.halamanDataSiswa.classList.toggle(
+        "aktif",
+        dataSiswaAktif
+      );
+
+      elemen.halamanAbsenHarian.classList.toggle(
+        "aktif",
+        !dataSiswaAktif
+      );
+
+      elemen.navDataSiswa.classList.toggle(
+        "aktif",
+        dataSiswaAktif
+      );
+
+      elemen.navAbsenHarian.classList.toggle(
+        "aktif",
+        !dataSiswaAktif
+      );
+
+      if (!dataSiswaAktif) {
+        tampilkanDaftarAbsen();
+      }
+    }
+
+    /* ==================================================
+       PESAN BERHASIL / GAGAL
+       ================================================== */
+
+    function tampilkanPesan(
+      teks,
+      tipe
+    ) {
+      elemen.pesan.textContent = teks;
+      elemen.pesan.className =
+        "message " + tipe;
+    }
+
+    /* ==================================================
+       EVENT
+       ================================================== */
+
+    elemen.tombolTambahSiswa.addEventListener(
+      "click",
+      tambahSatuSiswa
+    );
+
+    elemen.tombolTambahBanyak.addEventListener(
+      "click",
+      tambahBanyakSiswa
+    );
+
+    elemen.filterKelas.addEventListener(
+      "change",
+      tampilkanDaftarSiswa
+    );
+
+    elemen.pilihKelasAbsen.addEventListener(
+      "change",
+      () => {
+        dataAplikasi.kelasTerakhir =
+          elemen.pilihKelasAbsen.value;
+
+        simpanData();
+        tampilkanDaftarAbsen();
+      }
+    );
+
+    elemen.tanggalAbsen.addEventListener(
+      "change",
+      tampilkanDaftarAbsen
+    );
+
+    elemen.navDataSiswa.addEventListener(
+      "click",
+      () => tampilkanHalaman("siswa")
+    );
+
+    elemen.navAbsenHarian.addEventListener(
+      "click",
+      () => tampilkanHalaman("absen")
+    );
+
+    /* ==================================================
+       INISIALISASI APLIKASI
+       ================================================== */
+
+    bacaData();
+
+    // Gunakan tanggal hari ini sebagai tanggal awal.
+    elemen.tanggalAbsen.value =
+      tanggalHariIni();
+
+    // Tampilkan kelas terakhir jika tersedia.
+    perbaruiPilihanKelas();
+
+    if (dataAplikasi.kelasTerakhir) {
+      elemen.kelasSiswa.value =
+        dataAplikasi.kelasTerakhir;
+
+      elemen.filterKelas.value =
+        dataAplikasi.kelasTerakhir;
+
+      elemen.pilihKelasAbsen.value =
+        dataAplikasi.kelasTerakhir;
+    }
+
+    tampilkanDaftarSiswa();
+    tampilkanDaftarAbsen();
+  </script>
+</body>
+</html>
